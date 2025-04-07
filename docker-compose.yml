@@ -1,0 +1,91 @@
+services:
+  eureka:
+    container_name: eureka
+    build: ./eureka
+    image: hnefla12/eureka:latest
+    hostname: eureka
+    ports:
+      - "8761:8761"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+    networks:
+      - mshela_mshela_hela-network
+
+  msprojethela1:
+    container_name: msprojethela1
+    build: ./MSProjetHela
+    image: hnefla12/msprojethela:latest
+    volumes:
+      - h2_data:/data
+    hostname: msprojethela1
+    ports:
+      - "8088:8089"
+    environment:
+      - SERVER_PORT=8089
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+      - EUREKA_INSTANCE_HOSTNAME=msprojethela1
+      - EUREKA_INSTANCE_APPNAME=MSProjetHela
+      - EUREKA_INSTANCE_PORT=8088  # Add this to specify the external port
+      - SPRING_DATASOURCE_URL=jdbc:h2:file:/data/Projet;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE
+      - SPRING_H2_CONSOLE_ENABLED=true
+      - SPRING_H2_CONSOLE_PATH=/h2
+    depends_on:
+      - eureka
+    networks:
+      - mshela_mshela_hela-network
+
+  msprojethela2:
+    container_name: msprojethela2
+    build: ./MSProjetHela
+    image: hnefla12/msprojethela:latest
+    volumes:
+      - h2_data:/data
+    hostname: msprojethela2
+    ports:
+      - "8090:8090"
+    environment:
+      - SERVER_PORT=8090
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+      - EUREKA_INSTANCE_HOSTNAME=msprojethela2
+      - EUREKA_INSTANCE_APPNAME=MSProjetHela
+      - EUREKA_INSTANCE_PORT=8090  # Add this to specify the external port
+    depends_on:
+      - eureka
+    networks:
+      - mshela_mshela_hela-network
+
+  frontend-angular:
+    container_name: frontend-angular
+    build: ./MSFrontend
+    image: hnefla12/frontend-angular:latest
+    ports:
+      - "4201:80"
+    depends_on:
+      - api-gateway
+    environment:
+      - API_GATEWAY_URL=http://api-gateway:8093
+    networks:
+      - mshela_mshela_hela-network
+
+  api-gateway:
+    container_name: api-gateway
+    build: ./ApiGateway_4SAE10
+    image: hnefla12/api-gateway:latest
+    ports:
+      - "8093:8093"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+      - EUREKA_INSTANCE_HOSTNAME=api-gateway
+      - EUREKA_INSTANCE_PORT=8093  # Add this to specify the external port
+    depends_on:
+      - eureka
+    networks:
+      - mshela_mshela_hela-network
+
+volumes:
+  h2_data:
+    driver: local
+
+networks:
+  mshela_mshela_hela-network:
+    driver: bridge
