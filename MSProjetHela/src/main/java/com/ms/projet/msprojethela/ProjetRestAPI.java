@@ -4,11 +4,13 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 @RestController
 @RequestMapping("/projets")
@@ -84,6 +86,15 @@ public class ProjetRestAPI {
         }
 
         return ResponseEntity.ok(projets);
+    }
+    @GetMapping("/{id}/export-pdf")
+    public ResponseEntity<byte[]> exportProjetToPdf(@PathVariable Long id) throws IOException, IOException {
+        byte[] pdfContent = projetService.generateProjetPdf(id);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=projet_" + id + ".pdf")
+                .body(pdfContent);
     }
 
 
