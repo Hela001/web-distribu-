@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface IProjetService {
@@ -12,4 +13,8 @@ public interface IProjetService {
     Projet addProjet(Projet projet);
     Projet updateProjet(Long id, Projet projet);
     String deleteProjet(Long id);
-    public Page<Projet> getProjetsByStatus(Status status, Pageable pageable);    }
+    public Page<Projet> getProjetsByStatus(Status status, Pageable pageable);
+    public Map<String, Long> getProjetStatsByStatus();
+
+
+}

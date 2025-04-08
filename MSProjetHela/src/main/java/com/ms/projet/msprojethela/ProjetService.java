@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -87,6 +89,11 @@ public class ProjetService implements IProjetService {
 
         document.close();
         return out.toByteArray();
+    }
+    public Map<String, Long> getProjetStatsByStatus() {
+        List<Projet> projets = projetRepository.findAll();
+        return projets.stream()
+                .collect(Collectors.groupingBy(projet -> projet.getStatus().name(), Collectors.counting()));
     }
 
 

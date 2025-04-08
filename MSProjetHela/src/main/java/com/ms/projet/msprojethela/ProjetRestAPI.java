@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/projets")
 public class ProjetRestAPI {
@@ -95,6 +97,11 @@ public class ProjetRestAPI {
                 .contentType(MediaType.APPLICATION_PDF)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=projet_" + id + ".pdf")
                 .body(pdfContent);
+    }
+    @GetMapping("/stats")
+    public ResponseEntity<Map<String, Long>> getProjetStats() {
+        Map<String, Long> stats = projetService.getProjetStatsByStatus();
+        return ResponseEntity.ok(stats);  // Renvoie les statistiques des projets par statut
     }
 
 
