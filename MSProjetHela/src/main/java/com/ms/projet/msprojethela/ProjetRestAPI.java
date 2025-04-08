@@ -98,11 +98,7 @@ public class ProjetRestAPI {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=projet_" + id + ".pdf")
                 .body(pdfContent);
     }
-    @GetMapping("/stats")
-    public ResponseEntity<Map<String, Long>> getProjetStats() {
-        Map<String, Long> stats = projetService.getProjetStatsByStatus();
-        return ResponseEntity.ok(stats);  // Renvoie les statistiques des projets par statut
-    }
+
 
 
 

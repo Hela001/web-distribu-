@@ -14,7 +14,6 @@ public interface IProjetService {
     Projet updateProjet(Long id, Projet projet);
     String deleteProjet(Long id);
     public Page<Projet> getProjetsByStatus(Status status, Pageable pageable);
-    public Map<String, Long> getProjetStatsByStatus();
 
 
 }

@@ -90,11 +90,7 @@ public class ProjetService implements IProjetService {
         document.close();
         return out.toByteArray();
     }
-    public Map<String, Long> getProjetStatsByStatus() {
-        List<Projet> projets = projetRepository.findAll();
-        return projets.stream()
-                .collect(Collectors.groupingBy(projet -> projet.getStatus().name(), Collectors.counting()));
-    }
+
 
 
 }
